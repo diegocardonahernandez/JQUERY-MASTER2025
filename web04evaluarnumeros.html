@@ -18,18 +18,19 @@
     <script src="js/jquery-3.7.1.js"></script>
     <script>
 
-        $(document).ready(function(){
-           $("#botonEvaluar").click(function(){
-             var num1 = parseInt($("#numero1").val())
-            var num2 = parseInt($("#numero2").val())
-            var num3 = parseInt($("#numero2").val())
+    $(document).ready(function(){
 
-            var mayor , menor , intermedio;
 
-            var html = ""
+        $("#botonEvaluar").click(function(){
+
+        var num1 = parseInt($("#numero1").val())
+        var num2  = parseInt($("#numero2").val())
+        var num3 = parseInt($("#numero3").val())
+        var mayor, menor , medio
+        var html = ""
 
             if(num1 >= num2 && num1 >= num3){
-                mayor = num1
+                mayor = num1;
             }else if(num2 >= num1 && num2 >= num3){
                 mayor = num2
             }else{
@@ -39,24 +40,22 @@
             if(num1 <= num2 && num1 <= num3){
                 menor = num1
             }else if(num2 <= num1 && num2 <= num3){
-                menor = num2
+            menor = num2
             }else{
-                menor = num3    
+                menor = num3
             }
 
-            var suma = num1 + num2 + num3
-            intermedio = suma - mayor - menor
+            var suma = num1 + num2 + num3;
+            medio = suma - menor - mayor
 
-        html += "<h1> Mayor = " + mayor + "</h1>"
-        html += "<br>"
-        html += "<h2> Intermedio = " + intermedio + "</h2>"
-        html += "<br>"
-        html += "<h3> Menor = " + menor + "</h3>"
+            html += " Mayor : " + mayor + " Menor : " + menor + " Intermedio : " + medio
 
-        $("#resultados").html(html)
-           })
+            $("#resultados").html(html)
 
         })
+
+
+    })
 
     </script>
     
