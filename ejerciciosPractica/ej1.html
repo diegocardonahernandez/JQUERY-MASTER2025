@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ejercicio 1</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <button id="toggleBtn">Mostrar/Ocultar</button>
+  <p id="mensaje" style="display:none;">¡Hola, este es un mensaje oculto!</p>
+
+
+
+
+  <script src="../js/jquery-3.7.1.js"></script>
+  <script>
+    $(document).ready(function(){
+        $("#toggleBtn").click(function(){
+            // $("#mensaje").toggle()
+
+           if($("#mensaje").is(":hidden")){
+                $("#mensaje").show()
+           }else{
+            $("#mensaje").hide()
+           }
+        })
+    })
+  </script>
+
+</body>
+</html>
