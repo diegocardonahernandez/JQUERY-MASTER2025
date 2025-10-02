@@ -4,10 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+
+        body{
+            padding: 0.5em;
+            text-align: center;
+            border: solid 1px;
+        }
+
+        .rojo{
+            color: red;
+        }
+
+        .morado{
+            font-family:Arial, Helvetica, sans-serif;
+            color: blueviolet;
+        }
+
+    </style>
 </head>
 <body>
 
-    Probando sincronizacion
-    
+    <h1>Selectores JQuery</h1>    
+    <h2>Esto es una prueba</h2>
+    <button class="rojo" id="boton1">Soy boton 1</button>
+    <button id="boton2">Soy boton 2</button>
+    <p>Parrafo 1</p>
+    <p class="rojo">Parrafo 2</p>
+    <p>Parrafo 3</p>
+
+
+    <button id="cambiar">Cambiar a contraseña</button>
+    <button id="cambiar2">Cambiar a texto</button>
+    <input type="pa" id="campo">
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        // Aquí nuetsro código JQUERY
+        // La primera línea siempre debe ser la siguiente:
+        $(document).ready(function(){
+            // alert("Hola Mundo");
+
+            // $("h2").hide();
+
+            // $("#boton1").hide();
+
+            //Podemos asociar acciones a los objetos(CUANDO)
+
+            $("h1").mouseover(function(){
+                $("h1").addClass("morado")
+            })
+
+            $("h1").mouseout(function(){
+                $("h1").removeClass("morado")
+            })
+
+            $("p").click(function(){
+                //  IMPRECINDIBLE EN DESARROLO FRONT
+                //     UTILIZAR MENSAJES DE CONSOLA
+                console.log("Mensaje por consola web");
+                alert("Soy una p")
+
+                // Existe una palabra clave que indica
+                // que accedemos al objeto que ha realizado la llamada
+
+                //$(this).hide();
+                
+            })
+
+            $(".rojo").click(function(){
+                $(this).hide();
+            })
+
+           $("#cambiar").click(function(){
+            $("#campo").attr("type", "password");
+           })
+
+           $("#cambiar2").click(function(){
+            $("#campo").attr("type", "text")
+           })
+
+        });
+        
+    </script>
 </body>
 </html>
