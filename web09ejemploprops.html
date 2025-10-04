@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Atributos sin valor</h1>
+    <label for="">Seleccione número de checkbox</label>
+    <input type="range" id="rango" min="1" max="50" value="1">
+    <span id="valorRango"></span>
+    <h1 style="color: red" id="resultado">0</h1>
+    <hr>
+    <div id="contenedor"></div>
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#rango").change(function(){
+                var numElementos = parseInt($("#rango").val())
+                $("#valorRango").text(numElementos)
+                $("#contenedor").text("")
+
+                for(var i = 1 ; i <= numElementos ; i++){
+                    var aleatorio =parseInt(Math.random() * 100) + 1
+                    var chk = $("<input>" , {"type" : "checkbox" , "value" : aleatorio})
+                    var label = $("<label>" , {"text" : aleatorio})
+                        $("#contenedor").append(chk)
+                        $("#contenedor").append(label)
+                        chk.change(function(){
+
+                            // var resultado = parseInt($("#resultado").text())
+                            // var valor = parseInt($(this).val())
+                            // //Preguntamos por el valor del checkbox
+                            // if($(this).prop("checked")){
+                            //     resultado += valor
+                            // }else{
+                            //     resultado -= valor
+                            // }
+
+                            //OTRA MANERA DE HACERLO :
+                            var resultado = 0;
+                            //Sumamos solamente los controles chequeados
+                            $("input[type=checkbox]:checked").each(function(){
+                                var valor = parseInt($(this).val())
+                                resultado += valor
+                            })
+
+
+                            $("#resultado").text(resultado)
+                        })
+                }
+            })
+        })
+    </script>
+</body>
+</html>
