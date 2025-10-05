@@ -44,15 +44,32 @@
             $("#botonlocalidad").click(function(){
                 $.get("documents/departamentos.xml" , function(data){
                     console.log("Leyendo....")
-                    var localidad = $("#cajalocalidad").val()
-                    //El filtro será: LOC:contains(GIJON)
-                    var filtro = "LOC:contains(" + localidad +")"
+                    var  localidadRecibida = $("#cajalocalidad").val()
+                    var filtro = "LOC:contains(" + localidadRecibida +")"
                     var html = ""
-                    $(data).find(filtro).each(function(){
-                        var cosa = $(this).text()
-                        html += "<li>" + cosa + "</li>"
-                    })
-                    $("#listadepartamentos").html(html)
+                  
+                    var encontrados = $(data).find(filtro)
+
+                    if(encontrados.length == 0){
+                        console.log("No estoy encontrando nada...")
+                        html = "No se ha encontrado nigún departamento en esa localidad"
+                        $("#listadepartamentos").html(html)
+                    }else{
+                        encontrados.each(function(){
+                            console.log("Encontrandolos...")
+                            console.log(encontrados)
+                            var localidadEncontrada = $(this).text()
+                            var departamento = $(this).parent()
+                            var nombreDepartamento = departamento.find("DNOMBRE").text()
+                            var idDepartamento = departamento.attr("DEPT_NO")
+                            html += "<li> El ID es : " + idDepartamento + "</li>"
+                            html += "<li> El nombre es : " + nombreDepartamento + "</li>"
+                            html += "<li> la localidad es : "  + localidadEncontrada + "</li>"
+                            html += "<hr>"
+                            $("#listadepartamentos").html(html)
+                        })
+                    }
+
                 })
             })
 
