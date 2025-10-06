@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Clientes servicio XML</h1>
+    <label for="">Seleccione un cliente</label>
+    <select name="" id="clientes"></select>
+    <table id="infocliente">
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>DIRECCION</th>
+            <th>EMAIL</th>
+            <th>CODIGO POSTAL</th>
+            <th>PAGINA WEB</th>
+        </tr>
+        <tbody></tbody>
+    </table>
+
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Encontrar la información del cliente que se selccione (corregir)
+            let url = "https://apiclientesxml.azurewebsites.net/"
+            let request = "api/Clientes/GetClientesXML"
+
+            $.get(url + request, function (data) {
+                console.log("Leyendo clientes...")
+                $(data).find("CLIENTE").each(function () {
+                    var nombre = $(this).find("NOMBRE").text()
+                    var option = $("<option>", { "text": nombre, "value": $(this).val() }).appendTo($("#clientes"))
+
+                })
+                
+                    $("#clientes").change(function () {
+                        console.log("Leyendo información del cliente...")
+                        var html = ""
+                        $.get(url + request, function (data) {
+                            var id = $("#clientes").val()
+                            var filtro = "CLIENTE[IDCLIENTE= " + id + "]"
+                            var infocliente = $(data).find(filtro)
+                            var nomCliente = infocliente.find("NOMBRE").text()
+                            var direccion = infocliente.find("DIRECCION").text()
+                            var email = infocliente.find("EMAIL").text()
+                            var codigoPostal = infocliente.find("CODIGOPOSTAL").text()
+                            var pagina = infocliente.find("PAGINAWEB").text()
+
+                            html += "<tr>"
+                            html += "<td>" + id + "</td>"
+                            html += "<td>" + nomCliente + "</td>"
+                            html += "<td>" + direccion + "</td>"
+                            html += "<td>" + email + "</td>"
+                            html += "<td>" + codigoPostal + "</td>"
+                            html += "<td>" + pagina + "</td>"
+                            html += "</tr>"
+                            $("#infocliente tbody").html(html)
+
+                        })
+                    })
+
+            })
+
+
+        })
+    </script>
+
+</body>
+
+</html>

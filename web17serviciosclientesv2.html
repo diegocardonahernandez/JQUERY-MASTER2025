@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Clientes XML</h1>
+    <div id="botonesclientes"></div>
+    <div id="infocliente"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            let url = "https://apiclientesxml.azurewebsites.net/"
+            let request = "api/Clientes"
+
+            $.get(url + request, function (data) {
+                console.log("Leyendo...")
+                var clientes = $(data).find("Cliente")
+                var html = "<hr>"
+
+                clientes.each(function () {
+                    console.log("Creando botones...")
+                    var boton = $("<button>", { "text": $(this).find("Nombre").text(),
+                         "value": $(this).find("idCliente").text() }).appendTo($("#botonesclientes"))
+
+                    boton.click(function () {
+                        console.log("Rescibiendo info del cliente...")
+                        var id = $(this).val()
+                        var request = "api/Clientes/" + id
+                        $.get(url + request, function(data){
+                            var imagen = $(data).find("Imagen").text()
+                            var pagweb = $(data).find("PaginaWeb").text()
+                            var html = "<h1 style='blue'>" + pagweb + "</h1>"
+                            html += "<img src='" + imagen + "' width='70px' width='70px' >"
+                            html += "</hr>"
+                            $("#infocliente").html(html)
+                        })
+
+                    })
+                })
+
+
+
+            })
+        })
+    </script>
+</body>
+
+</html>
