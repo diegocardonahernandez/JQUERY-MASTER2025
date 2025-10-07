@@ -24,19 +24,20 @@
     <script src="js/jquery-3.7.1.js"></script>
     <script>
         let url = "https://apicruddepartamentosxml.azurewebsites.net/"
+        var request = "api/departamentos"
+
         $(document).ready(function () {
             loeadDepartamentos()
         })
 
 
         function loeadDepartamentos() {
-            var request = "api/departamentos"
             $.get(url + request, function(data){
-                console.og("Leyendo servicio...")
+                console.log("Leyendo servicio...")
                 var html = ""
                
                 $(data).find("Departamento").each(function(){
-                    var id = $(this).find("idDepatamento").text()
+                    var id = $(this).find("idDepartamento").text()
                     var nombre = $(this).find("Nombre").text()
                     var localidad = $(this).find("localidad").text()
                     html += "<tr>"
