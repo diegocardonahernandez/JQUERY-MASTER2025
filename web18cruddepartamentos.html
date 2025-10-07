@@ -22,21 +22,97 @@
     </table>
 
     <script src="js/jquery-3.7.1.js"></script>
+    <label for="">ID Departamento</label>
+    <input type="text" id="cajaid"><br>
+    <label for="">Nombre</label>
+    <input type="text" id="cajanombre">
+    <label for="">Localidad</label>
+    <input type="text" id="cajalocalidad">
+    <button id="botoninsert">Insertar</button>
+    <button id="botonupdate">Modificar</button>
+    <button id="botondelete">Eliminar</button>
     <script>
         let url = "https://apicruddepartamentosxml.azurewebsites.net/"
-        var request = "api/departamentos"
 
         $(document).ready(function () {
             loeadDepartamentos()
+            $("#botoninsert").click(function () {
+                let id = $("#cajaid").val()
+                let nombre = $("#cajanombre").val()
+                let localidad = $("#cajalocalidad").val()
+                //Necesitamos generar un string con la misma estructura
+                //que el documento XML para sus resgitros
+                let dataXML = "<Departamento>"
+                dataXML += "<IdDepartamento>" + id + "</IdDepartamento>"
+                dataXML += "<Nombre>" + nombre + "</Nombre>"
+                dataXML += "<Localidad>" + localidad + "</Localidad>"
+                dataXML += "</Departamento>"
+                let request = "api/Departamentos"
+                //Realizamos la petición con AJAX
+                $.ajax({
+                    url: url + request,
+                    type: "post",
+                    contentType: "text/XML",
+                    data: dataXML,
+                    success: function () {
+                        console.log("Datos insertados")
+                        loeadDepartamentos()
+                    }
+                })
+            })
+
+            $("#botonupdate").click(function () {
+                let id = $("#cajaid").val()
+                let nombre = $("#cajanombre").val()
+                let localidad = $("#cajalocalidad").val()
+                let dataXML = getDepartamentoXML(id,nombre,localidad)
+                let request = "api/Departamentos"
+                $.ajax({
+                    url: url + request,
+                    type: "put",
+                    contentType: "text/xml",
+                    data: dataXML,
+                    success: function(){
+                        console.log("Modificado")
+                        loeadDepartamentos()
+                    }
+                })
+            })
+
+            $("#botondelete").click(function(){
+                let id = $("#cajaid").val()
+                let request = "api/Departamentos/" + id
+                $.ajax({
+                    url: url + request,
+                    type: "delete",
+                    success: function(){
+                        console.log("Eliminado")
+                        loeadDepartamentos()
+                    }
+                })
+            })
+
         })
+
+        function getDepartamentoXML(id, nombre, localidad) {
+
+            //Copiamos el código de generación del objeto XML
+            let dataXML = "<Departamento>"
+            dataXML += "<IdDepartamento>" + id + "</IdDepartamento>"
+            dataXML += "<Nombre>" + nombre + "</Nombre>"
+            dataXML += "<Localidad>" + localidad + "</Localidad>"
+            dataXML += "</Departamento>"
+            return dataXML
+        }
 
 
         function loeadDepartamentos() {
-            $.get(url + request, function(data){
+            var request = "api/departamentos"
+            $.get(url + request, function (data) {
                 console.log("Leyendo servicio...")
                 var html = ""
-               
-                $(data).find("Departamento").each(function(){
+
+                $(data).find("Departamento").each(function () {
                     var id = $(this).find("idDepartamento").text()
                     var nombre = $(this).find("Nombre").text()
                     var localidad = $(this).find("localidad").text()
