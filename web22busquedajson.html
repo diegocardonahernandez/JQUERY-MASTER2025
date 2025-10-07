@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Búsqueda Documento JSON</h1>
+    <label for="">Seleccione un jugador</label>
+    <select name="" id="jugadores"></select>
+    <div id="datosjugador"></div>
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.getJSON("documents/jugadores.json" , function(data){
+                $.each(data.jugadores , function(index , player){
+                    var nombre = player.nombre
+                    var option = $("<option>" , {"text" : nombre}).appendTo($("#jugadores"))
+                })
+            })
+
+            $("#jugadores").change(function(){
+                console.log("Jugador seleccionado")
+                var nombre = $("#jugadores").val()
+                $.ajax({
+                    url: "documents/jugadores.json",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data){
+                        console.log("Cogiendo datos...")
+                        var html = ""
+                        $.each(data.jugadores, function(index,player){
+                            console.log("recoriendo jugadores...")
+                            var playername = player.nombre
+                            if(playername == nombre){
+                                console.log("Mostrando datos de jugador...")
+                                var posicion = player.posicion
+                                var imagen = player.imagen
+                                html += "<h1>" + playername + "</h1>"
+                                html += "<p>Posición: " +  posicion + "</p>"
+                                html += "<img src '" + imagen + "' width='80px' heihgt='80px' />"
+                            }
+                        })
+                        $("#datosjugador").html(html)
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>
