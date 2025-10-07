@@ -1,42 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
 
     <h1>Eliminar departamentos</h1>
-    <ul id="botonesdepartamentos"></ul>
+    <ul id="departamentos"></ul>
 
 
     <script src="js/jquery-3.7.1.js"></script>
     <script>
         let url = "https://apicruddepartamentospgs.azurewebsites.net/"
-        $(document).ready(function(){
+        $(document).ready(function () {
 
             loaddepartamentos()
+
 
         })
 
 
-        function loaddepartamentos(){
-            var request = "/webresources/departamentos"
+        function loaddepartamentos() {
+            console.log("Conectando con los departamentos...")
+            var request = "webresources/departamentos"
+
             $.ajax({
                 url: url + request,
                 type: "GET",
-                contentType: "application/json",
-                success: function(data){
-                    $.each(data , function(index,departamento){
-                        $("<li>" , {"text" : departamento.nombre , "id" : "dept" + departamento.numero}).appendTo($("#botonesdepartamentos"))
-                        $("<button>" , {"text" : departamento.nombre + " / Eliminar!"}).appendTo("#dept"+ departamento.numero)
-                    })//Corregir (mejor no crear los <li> dinámicos)
+                success: function (data) {
+                    console.log("Departamentos recibidos")
+                    var html = ""
+                    $.each(data, function (index, departamento) {
+                        console.log("Añadiendo departamento...")
+                        html += "<li id='dept" + departamento.numero + "'>" + departamento.nombre + "</li>"
+
+                    })
+                    $("#departamentos").html(html)
+
+                    $.each(data, function (index, departamento) {
+                        var boton = $("<button>", {
+                            "text": departamento.nombre,
+                            "value": departamento.numero
+                        }).appendTo("#dept" + departamento.numero)
+
+                        boton.click(function () {
+                            console.log("Procesando la petición de eliminación...")
+                            var request = "/webresources/departamentos/delete/" + $(this).val()
+
+                            $.ajax({
+                                url: url + request,
+                                type: "DELETE",
+                                success: function () {
+                                    console.log("Eliminado!")
+                                    loaddepartamentos()
+                                }
+                            })
+
+                        })
+
+                    })
                 }
+
             })
+
         }
 
     </script>
-    
+
 </body>
+
 </html>
