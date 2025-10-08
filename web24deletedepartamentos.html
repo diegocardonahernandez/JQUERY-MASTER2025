@@ -36,12 +36,7 @@
                     var html = ""
                     $.each(data, function (index, departamento) {
                         console.log("Añadiendo departamento...")
-                        html += "<li id='dept" + departamento.numero + "'>" + departamento.nombre + "</li>"
-
-                    })
-                    $("#departamentos").html(html)
-
-                    $.each(data, function (index, departamento) {
+                        var li = $("<li>", { "text": departamento.nombre, "id": "dept" + departamento.numero }).appendTo("#departamentos")
                         var boton = $("<button>", {
                             "text": departamento.nombre,
                             "value": departamento.numero
@@ -50,6 +45,7 @@
                         boton.click(function () {
                             console.log("Procesando la petición de eliminación...")
                             var request = "/webresources/departamentos/delete/" + $(this).val()
+                            $("#departamentos").empty()
 
                             $.ajax({
                                 url: url + request,
@@ -61,8 +57,8 @@
                             })
 
                         })
-
                     })
+                   
                 }
 
             })
