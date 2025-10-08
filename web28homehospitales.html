@@ -10,8 +10,7 @@
     <title>Fixed top navbar example · Bootstrap v5.3</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/navbar-fixed/">
     <script src="js/color-modes.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
     <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
@@ -160,19 +159,19 @@
         </ul>
     </div>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid"> <a class="navbar-brand" href="#">CRUD Hospitales </a> <button class="navbar-toggler"
-                type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse"
-                aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
+        <div class="container-fluid"> <a class="navbar-brand" href="#">CRUD Hospitales </a> <button
+                class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"> <span
+                    class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                         <a class="nav-link active" aria-current="page" href="web28homehospitales.html">Home</a>
-                         </li>
-                    <li class="nav-item"> 
+                        <a class="nav-link active" aria-current="page" href="web28homehospitales.html">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="web28crearhospital.html">New Hospital</a>
-                     </li>
-                    <li class="nav-item"> <a class="nav-link disabled" aria-disabled="true">Disabled</a> </li>
+                    </li>
                 </ul>
                 <form class="d-flex" role="search"> <input class="form-control me-2" type="search" placeholder="Search"
                         aria-label="Search"> <button class="btn btn-outline-success" type="submit">Search</button>
@@ -189,40 +188,60 @@
                         <th>Nombre</th>
                         <th>Dirección</th>
                         <th>Details</th>
+                        <th>Modify</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
-
         </div>
     </main>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery-3.7.1.js"></script>
     <script>
         let url = "https://apicrudhospital.azurewebsites.net/"
-        $(document).ready(function(){
+        $(document).ready(function () {
             let request = "webresources/hospitales"
             $.ajax({
                 url: url + request,
                 type: "GET",
                 contentType: "application/json",
-                success: function(data){
+                success: function (data) {
                     console.log("Leyendo hospitales")
                     var html = ""
-                    $.each(data, function(index,hospital){
+                    $.each(data, function (index, hospital) {
                         console.log("Añadiendo hospital...")
                         html += "<tr>"
                         html += "<td>" + hospital.nombre + "</td>"
                         html += "<td>" + hospital.direccion + "</td>"
                         html += "<td>"
-                             html += "<a href='web28detailshospital.html?idhospital=" + hospital.idhospital + "'>Details</a>"
+                        html += "<a href='web28detailshospital.html?idhospital=" + hospital.idhospital + "'>Details</a>"
                         html += "</td>"
+                        html += "<td>"
+                        html += "<a href='web28modifyhospital.html'>Modify</a>"
+                        html += "</td>"
+                        html += "<td>";
+                        html += "<button class='btn btn-danger botoneliminar' id='botoneliminar' value='" + hospital.idhospital + "'>Eliminar</button>";
+                        html += "</td>";
                         html += "</tr>"
                     })
                     $("#tablahospitales tbody").html(html)
+
+                    $(".botoneliminar").click(function(){
+                        console.log("Petición de eliminación recibida")
+                        var request = "webresources/hospitales/delete/" + $(this).val()
+                        $.ajax({
+                            url: url + request,
+                            type: "DELETE",
+                            success: function(){
+                                console.log("Departamento eliminado correctamente !")
+                            }
+                        })
+                    })
+
                 }
             })
-            
+
         })
     </script>
 </body>

@@ -99,18 +99,6 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
             display: block !important
         }
-
-        .container{
-            display:flex;
-            flex-wrap: wrap;
-            width: 100%;
-            align-items: center;
-        }
-
-        .container label{
-            width: 100%;
-        }
-
     </style>
 </head>
 
@@ -192,55 +180,64 @@
         </div>
     </nav>
     <main class="container">
-        <div class="bg-body-tertiary p-5 rounded">
-            <h2 id="mensajeconfirmacion"></h2>
-            <h1>Crear Hospital</h1>
-
-            <label for="">ID HOSPITAL </label>
-            <input type="text" id="cajaid">
-            <label for="">Nombre</label>
-            <input type="text" id="cajanombre">
-            <label for="">Direccion</label>
-            <input type="text" id="cajadireccion">
-            <label for="">Teléfono</label>
-            <input type="text" id="cajatelefono"><br>
-            <label for="">Número de camas</label>
-            <input type="text" id="cajacamas"><br>
-
-            <button id="insertarhospital">Insertar</button>
-
+        <div class="bg-body-tertiary p-5 rounded" id="tablamodificar">
+            <h1>Editar Datos del Hospital</h1>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID Hospital</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Número Camas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type='text' id='cajaid'></td>
+                        <td><input type='text' id='cajanombre'></td>
+                        <td><input type='text' id='cajadireccion'></td>
+                        <td><input type='text' id='cajatelefono'></td>
+                        <td><input type='text' id='cajacamas'></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="modificar">Modificar</button>
+            <h2 id="datosmodificados"></h2>
         </div>
     </main>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/jquery-3.7.1.js"></script><a href=""></a>
     <script>
         let url = "https://apicrudhospital.azurewebsites.net/"
+
         $(document).ready(function () {
 
-            $("#insertarhospital").click(function(){
-                console.log("Petición de nuevo hospital recibida...")
-                var request = "webresources/hospitales/post"
+            $("#modificar").click(function () {
+                console.log("Preparando modificación...")
+                var requestFind = "/webresources/hospitales/put"
                 var id = parseInt($("#cajaid").val())
                 var nombre = $("#cajanombre").val()
                 var direccion = $("#cajadireccion").val()
                 var telefono = $("#cajatelefono").val()
-                var numcamas = parseInt($("#cajacamas").val())
-
-                var hospital = {"idhospital": id, "nombre": nombre, 
-                    "direccion": direccion, "telefono": telefono, "camas": numcamas
+                var camas = $("#cajacamas").val()
+                var hospitalModified = {
+                    "idhospital": id, "nombre": nombre, "direccion": direccion,
+                    "telefono": telefono, "camas": camas
                 }
-
-                var dataJSON = JSON.stringify(hospital)
-                console.log(dataJSON)
+                var dataJSON = JSON.stringify(hospitalModified)
+                console.log("Nuevos datos: " + dataJSON)
 
                 $.ajax({
-                    url: url + request,
-                    type: "POST",
+                    url: url + requestFind,
+                    type: "PUT",
                     contentType: "application/json",
                     data: dataJSON,
-                    success: function(){
-                        console.log("Insertado!")
-                        $("#mensajeconfirmacion").text("Hospital insertado!")
+                    success: function () {
+                        console.log("Datos modificados!")
+                        var html = "Datos modificados correctamente!<br>"
+                        html += "<a href='web28homehospitales.html'>Volver</a>"
+                        $("#datosmodificados").html(html)
                     }
                 })
             })
