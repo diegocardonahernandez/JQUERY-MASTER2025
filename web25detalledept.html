@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Maestro detalle empleados departamento</h1>
+    <ul id="departamentos"></ul>
+    <table id="empleados" border="1px">
+        <thead>
+            <tr>
+                <th>Apellido</th>
+                <th>Oficio</th>
+                <th>Salario</th>
+                <th>Departamento</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <!-- Tenemos la siguiente URL con datos de Empleados.  
+    https://apiempleadosspgs.azurewebsites.net/
+    Cada empleado tiene un número de departamento asociado que indica en qué departamento trabaja.
+    Necesito combinar el Api de Departamentos con el Api de Empleados. -->
+    <script>
+
+        let url = "https://apicruddepartamentospgs.azurewebsites.net/"
+        let url2 = "https://apiempleadosspgs.azurewebsites.net/"
+
+        $(document).ready(function () {
+
+            loadDepartamentos()
+        })
+
+
+        function loadDepartamentos() {
+
+            console.log("Conectando con los departamentos...")
+            var request = "webresources/departamentos"
+            $.ajax({
+                url: url + request,
+                type: "GET",
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("Info departamentos recibida...")
+                    $.each(data, function (index, dept) {
+                        var li = $("<li>", { "text": dept.nombre, "id": dept.numero }).appendTo($("#departamentos"))
+                        var boton = $("<button>", { "text": "Empleados", "value": dept.numero }).appendTo(li)
+                        boton.click(function () {
+                            getEmpleadosDept($(this).val())
+                        })
+                    })
+                }
+            })
+
+        }
+
+        function getEmpleadosDept(idDepartamento) {
+
+            console.log("Petición info empleados recibida")
+            var request = "api/Empleados/EmpleadosDepartamento/" + idDepartamento
+            $.ajax({
+                url: url2 + request,
+                type: "GET",
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("Empleados del dept seleccionado recibidos!")
+                    var html = ""
+                    $.each(data, function (index, empleado) {
+                        console.log("Empleado de dept " + idDepartamento + " encontrado")
+                        html += "<tr>"
+                        html += "<td>" + empleado.apellido + "</td>"
+                        html += "<td>" + empleado.oficio + "</td>"
+                        html += "<td>" + empleado.salario + "</td>"
+                        html += "<td>" + empleado.departamento + "</td>"
+                        html += "</tr>"
+                    })
+                    $("#empleados tbody").html(html)
+                }
+            })
+
+        }
+
+    </script>
+</body>
+
+</html>
