@@ -18,6 +18,7 @@
     <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
     <meta name="theme-color" content="#712cf9">
     <link href="css/navbar-fixed.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -201,13 +202,22 @@
     <script>
         let url = "https://apicrudhospital.azurewebsites.net/"
         $(document).ready(function () {
+
+            loadhospitales()
+
+        })
+
+
+        function loadhospitales() {
+
+            console.log("Accediendo al servicio de hospitales...")
             let request = "webresources/hospitales"
             $.ajax({
                 url: url + request,
                 type: "GET",
-                contentType: "application/json",
+                dataType: "json",
                 success: function (data) {
-                    console.log("Leyendo hospitales")
+                    console.log("Recibiendo información hospitales...")
                     var html = ""
                     $.each(data, function (index, hospital) {
                         console.log("Añadiendo hospital...")
@@ -215,34 +225,36 @@
                         html += "<td>" + hospital.nombre + "</td>"
                         html += "<td>" + hospital.direccion + "</td>"
                         html += "<td>"
-                        html += "<a href='web28detailshospital.html?idhospital=" + hospital.idhospital + "'>Details</a>"
+                        html += "<a href='web28detailshospital.html?idhospital=" + hospital.idhospital + "'><i class='bi bi-eye-fill'></i></a>"
                         html += "</td>"
                         html += "<td>"
-                        html += "<a href='web28modifyhospital.html'>Modify</a>"
+                        html += "<a href='web28modifyhospital.html?idhospital=" + hospital.idhospital + "''>Modify</a>"
                         html += "</td>"
                         html += "<td>";
-                        html += "<button class='btn btn-danger botoneliminar' id='botoneliminar' value='" + hospital.idhospital + "'>Eliminar</button>";
+                        html += "<button class='btn btn-danger botoneliminar' id='botoneliminar' value='" + hospital.idhospital + "'><i class='bi bi-trash'></i></button>";
                         html += "</td>";
                         html += "</tr>"
                     })
                     $("#tablahospitales tbody").html(html)
 
-                    $(".botoneliminar").click(function(){
+                    $(".botoneliminar").click(function () {
                         console.log("Petición de eliminación recibida")
                         var request = "webresources/hospitales/delete/" + $(this).val()
                         $.ajax({
                             url: url + request,
                             type: "DELETE",
-                            success: function(){
+                            success: function () {
                                 console.log("Departamento eliminado correctamente !")
+                                $("#tabladepartamentos tbody").empty()
+                                loadhospitales()
                             }
                         })
                     })
-
                 }
             })
 
-        })
+        }
+
     </script>
 </body>
 

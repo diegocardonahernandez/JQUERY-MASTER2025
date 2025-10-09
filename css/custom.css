@@ -1,0 +1,6 @@
+/* Custom styles for .table class */
+.table {
+    padding: 0.75rem 1.5rem; /* Add more horizontal padding */
+    border-spacing: 0.5rem; /* Add spacing between cells */
+    border-collapse: separate; /* Ensure spacing is visible */
+}

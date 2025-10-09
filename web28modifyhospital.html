@@ -213,6 +213,8 @@
 
         $(document).ready(function () {
 
+            getHospital()
+
             $("#modificar").click(function () {
                 console.log("Preparando modificación...")
                 var requestFind = "/webresources/hospitales/put"
@@ -235,14 +237,32 @@
                     data: dataJSON,
                     success: function () {
                         console.log("Datos modificados!")
-                        var html = "Datos modificados correctamente!<br>"
-                        html += "<a href='web28homehospitales.html'>Volver</a>"
-                        $("#datosmodificados").html(html)
+                        window.location.href = "web28detailshospital.html?idhospital=" + id
                     }
                 })
             })
 
         })
+
+
+        function getHospital(){
+            var params = new window.URLSearchParams(window.location.search)
+            var idHospital = params.get("idhospital")
+            var request = "webresources/hospitales/" + idHospital
+            $.ajax({
+                url: url + request,
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    $("#cajaid").val(data.idhospital)
+                    $("#cajanombre").val(data.nombre)
+                    $("#cajadireccion").val(data.direccion)
+                    $("#cajatelefono").val(data.telefono)
+                    $("#cajacamas").val(data.camas)
+                }
+            })
+        }
+
     </script>
 </body>
 
