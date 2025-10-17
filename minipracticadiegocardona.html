@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>MINI PRACTICA VIERNES JQUERY</h1>
+    <label for="">Seleccione un curso: </label>
+    <select id="cursos"></select>
+    <div id="alumnoinfo"></div>
+    <ul id="alumnoscurso"></ul>
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+
+        let url = "https://apiejemplos.azurewebsites.net/"
+
+        $(document).ready(function () {
+            getCursos()
+
+            $("#cursos").change(function () {
+                $("#alumnoscurso").empty()
+                $("#alumnoinfo").empty()
+                getAlumnosCurso($("#cursos").val())
+            })
+        })
+
+
+        function getCursos() {
+            console.log("Accediendo al servicio para buscar cursos")
+            var request = "api/Alumnos/Cursos"
+
+            $.ajax({
+                type: "GET",
+                url: url + request,
+                dataType: "json",
+                success: function (data) {
+                    console.log("Cursos recibidos!")
+                    $.each(data, function (index, curso) {
+                        $("<option>", { "text": curso, "value": curso }).appendTo("#cursos")
+                    })
+
+                }
+            })
+
+        }
+
+        function getAlumnosCurso(id) {
+            console.log("Buscando alumnos del curso...")
+            var idcurso = parseInt(id)
+            var request = "api/Alumnos/FiltrarCurso/" + id
+            $.ajax({
+                type: "GET",
+                url: url + request,
+                dataType: "json",
+                success: function (data) {
+                    console.log("Alumnos del curso encontrados!!!")
+                    $.each(data, function (index, alumno) {
+                        console.log("Añadiendo alumno...")
+                        var li = $("<li>", {
+                            "text": alumno.nombre + " " + alumno.apellidos,
+                            "value": alumno.idAlumno
+                        }).appendTo("#alumnoscurso")
+
+                        var boton = $("<button>", {
+                            "text": "Detalles",
+                            "value": alumno.idAlumno
+                        }).appendTo(li)
+
+                        boton.click(function () {
+                            var idbuscar = $(this).val()
+                            getAlumnoData(idbuscar)
+                        })
+
+                    })
+                }
+            })
+        }
+
+        function getAlumnoData(id) {
+            console.log("Localizando alumno...")
+            var idalu = parseInt(id)
+            var request = "api/Alumnos/FindAlumno/" + id
+
+            $.ajax({
+                type: "GET",
+                url: url + request,
+                dataType: "json",
+                success: function (data) {
+                    console.log("Alumno encontrado!!!")
+                    console.log(data.imagen)
+                    var html = ""
+                    html += "<h1>Nombre Alumno: " + data.nombre + " " + data.apellidos + "</h1>"
+                    html += "<h3> ID Alumno: " + data.idAlumno + "</h3>"
+                    html += "<img src='" + data.imagen + "'>"
+                    $("#alumnoinfo").html(html)
+                }
+            })
+
+        }
+
+
+    </script>
+</body>
+
+</html>
